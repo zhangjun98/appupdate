@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册LAU</title>
+    <link rel="stylesheet" href="Sys/css/layui.css">
+    <link rel="stylesheet" href="Sys/css/sign.css">
+    <link rel="stylesheet" href="Sys/js/css/modules/layui-icon-extend/iconfont.css">
+     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="Sys/css/font.css">
+	<link rel="stylesheet" href="Sys/css/xadmin.css">
+	<link rel="stylesheet" href="Sys/css/formSelects-v4.css" />
+<script type="text/javascript" src="Sys/js/jquery-3.3.1.min.js"></script>
+<script src="Sys/lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="Sys/js/xadmin.js"></script>
+<script src="Sys/js/formSelects-v4.js" type="text/javascript" charset="utf-8"></script>
+</head>
+    <body>
+    <div class="x-body layui-anim layui-anim-up">
+        <blockquote class="layui-elem-quote">欢迎：<span
+					th:text="${session.name}"></span><img
+					th:src="@{/uploads/{filename}(filename=${session.photo})}"
+					th:if="${session.account!='admin'}" /> <img
+					th:src="@{Sys/images/my1.png}" th:if="${session.account=='admin'}" />
+          当前日期:[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]</blockquote>
+    </div>
+
+    </body>
+</html>

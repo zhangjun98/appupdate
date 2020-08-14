@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" href="${ctxsta}/img/img-01.png" type="image/x-icon" />
+    <link rel="stylesheet" href="Sys/css/layui.css">
+    <link rel="stylesheet" href="Sys/css/sign.css">
+    <link rel="stylesheet"
+          href="Sys/js/css/modules/layui-icon-extend/iconfont.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="Sys/css/font.css">
+    <link rel="stylesheet" href="Sys/css/xadmin.css">
+    <script type="text/javascript"
+            src="Sys/js/jquery-3.3.1.min.js"></script>
+    <script src="Sys/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Sys/js/xadmin.js"></script>
+    <script type="text/javascript" src = "Sys/js/jquery.table2excel.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div style="margin-top: 20px;margin-left: 20px">
+    <table id="dataTable" lay-filter="dataTableFilter"></table>
+</div>
+
+
+<form class="layui-form" id="updateform"  style="display:none">
+    <div class="x-nav" style="border-bottom: 0px solid #e5e5e5;height: 20px;">
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">包名</label>
+        <div class="layui-input-block">
+            <input type="text" id="productPackge" lay-verify="required" readonly unselectable="on" autocomplete="off" class="layui-input" style="width: 350px;">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">版本名称</label>
+        <div class="layui-input-block">
+            <input type="text" id="versionName" lay-verify="required" readonly unselectable="on" autocomplete="off" class="layui-input" style="width: 350px;">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">版本号</label>
+        <div class="layui-input-block">
+            <input type="text" id="versionCode1" lay-verify="required" readonly unselectable="on" autocomplete="off" class="layui-input" style="width: 350px;">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">更新方式</label>
+        <div class="layui-input-block">
+            <input type="radio" name="updateMethod" value="1" title="推荐更新" checked="">
+            <input type="radio" name="updateMethod" value="2" title="强制更新">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">更新说明</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入更新说明" id="updateDirections" lay-verify="required" lay-reqtext="更新说明是必填项" class="layui-textarea" style="width: 350px;"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件</label>
+        <input type="file" id="fileid" name="file"/></p>
+    </div>
+</form>
+</body>
+<!-- 头工具栏 -->
+<!-- 行工具栏 -->
+<script type="text/html" id="rowBtns">
+    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="update"><i class="layui-icon layui-icon-update"></i>更新</button>
+</script>
+<script>
+    function Format(datetime,fmt) {
+        if (parseInt(datetime)==datetime) {
+            if (datetime.length==10) {
+                datetime=parseInt(datetime)*1000;
+            } else if(datetime.length==13) {
+                datetime=parseInt(datetime);
+            }
+        }
+        datetime=new Date(datetime);
+        var o = {
+            "M+" : datetime.getMonth()+1,                 //月份
+            "d+" : datetime.getDate(),                    //日
+            "h+" : datetime.getHours(),                   //小时
+            "m+" : datetime.getMinutes(),                 //分
+            "s+" : datetime.getSeconds(),                 //秒
+            "q+" : Math.floor((datetime.getMonth()+3)/3), //季度
+            "S"  : datetime.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt))
+            fmt=fmt.replace(RegExp.$1, (datetime.getFullYear()+"").substr(4 - RegExp.$1.length));
+        for(var k in o)
+            if(new RegExp("("+ k +")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        return fmt;
+    }
+    function getsize(size) {
+        var size1=(size/(1024*1024)).toFixed(2);
+        return size1+"MB";
+    }
+</script>
+<script type="text/javascript">
+    layui.use(['form','layer','laydate','table'],function(){
+        var layer = layui.layer;
+        var table = layui.table;
+        //渲染table数据表格
+            var documentWidth = $(document).width()*(7/8);
+        var t = table.render({
+            id:"dataTableId",
+            elem:"#dataTable",
+            url:"List/getallnewProduct",
+            page:true,//开启分页
+            cols: [
+            [
+                    {field: 'productID', title: '包名', width: documentWidth * 15 / 100, sort: true}
+                , {field: 'productVersionID', title: '版本名称', width: documentWidth * 8 / 100}
+                , {field: 'versionCode', title: '版本号', width: documentWidth * 8 / 100}
+                , {field: 'productFileName', title: '文件名', width: documentWidth * 20 / 100}
+                , {field: 'productFileSize', title: '文件大小', width: documentWidth * 12 / 100,
+                templet: '<div>{{getsize(d.productFileSize)}}</div>'
+            }
+                , {
+                field: 'updateMethod', title: '更新方式', width: documentWidth * 12 / 100, templet: function (d) {
+                    if (d.updateMethod == 1) {
+                        return '推荐更新';
+                    }else if(d.updateMethod == 2){
+                        return '<div style="color: red" >强制更新</div>';
+                    }
+                }
+            }
+                , {
+                field: 'timeStamp',
+                title: '更新时间',
+                width: documentWidth *12 / 100,
+                templet: '<div>{{ Format(d.timeStamp,"yyyy-MM-dd")}}</div>'
+            }
+                , {field: 'updateDirections', title: '更新说明', width: documentWidth * 32 / 100},
+                    {title:'操作',toolbar:'#rowBtns',fixed:'right',width:100}
+            ]
+        ]
+        });
+        //搜索按钮事件
+        $("#searchBtn").click(function(){
+            var materName = $("#materName").val();
+            var userid = $("#userid").val();
+
+            //进行表格数据重载
+            t.reload({
+                where:{
+                    'localid':materName,
+                    'userid':userid
+                },
+                page:1
+            });
+        });
+
+        //==行监听事件=============================================
+        table.on("tool(dataTableFilter)",function(d){
+            var event = d.event;
+            var data = d.data;
+            if(event == "update"){
+                update(data);
+            }
+        });
+
+       function update(data){
+            $("#productPackge").val(data.productID);
+            $("#versionName").val(data.productVersionID);
+            $("#versionCode1").val(data.versionCode);
+            $("#updateDirections").val(data.updateDirections);
+            layer.open({
+                type:1,
+                area:['500px','650px'],
+                title: '更新'
+                ,content: $("#updateform"),
+                shade: 0,
+                btn: ['提交', '重置']
+                ,
+                btn2: function(index, layero){
+                    return false;
+                },
+                cancel: function(layero,index){
+                    layer.closeAll();
+                },
+                btn1: function(index, layero){
+                    var productPackge = $.trim($('#productPackge').val());
+                    var versionCode = $.trim($('#versionCode1').val());
+                    var versionName = $.trim($('#versionName').val());
+                    var updateDirections = $.trim($('#updateDirections').val());
+                    var updateMethod = $.trim($('input[name="updateMethod"]:checked').val());
+                    var files = $('#fileid').prop('files')[0];
+                    var formData = new FormData();
+                    if(typeof files != 'undefined'){
+                        formData.append("file",files);
+                    }
+                    formData.append("productPackge", productPackge);
+                    formData.append("versionCode", versionCode);
+                    formData.append("versionName", versionName);
+                    formData.append("updateDirections", updateDirections);
+                    formData.append("updateMethod", updateMethod);
+                    formData.append("runmethod", 2);
+                    layer.msg('上传中', {
+                        icon: 16
+                        ,shade: 0.01
+                    });
+                    $.ajax({
+                        url:'server/upload',
+                        type : "post",
+                        dataType:'json',
+                        data: formData,
+                        processData : false,
+                        contentType : false,
+                        enctype:"multipart/form-data",
+                        success: function(data){
+                            layer.closeAll('loading');
+                            layer.msg(data.message, function() {
+                                window.location.href = 'viewNew';
+                            });
+
+                        },
+                        error:function(response){
+                            layer.alert("服务器异常");
+                        }
+                    });
+                }
+            });
+        }
+
+    });
+</script>
+</html>

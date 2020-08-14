@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册LAU</title>
+    <link rel="stylesheet" href="Sys/css/layui.css">
+    <link rel="stylesheet" href="Sys/css/sign.css">
+    <link rel="stylesheet" href="Sys/js/css/modules/layui-icon-extend/iconfont.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="Sys/css/font.css">
+    <link rel="stylesheet" href="Sys/css/xadmin.css">
+    <link rel="stylesheet" href="Sys/css/formSelects-v4.css" />
+    <script type="text/javascript" src="Sys/js/jquery-3.3.1.min.js"></script>
+    <script src="Sys/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Sys/js/xadmin.js"></script>
+    <script src="Sys/js/formSelects-v4.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="x-body layui-anim layui-anim-up layui-tab-content">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>更新APK包</legend>
+    </fieldset>
+    <form class="layui-form" id="baseform" action="" enctype="multipart/form-data">
+        <div class="layui-form-item">
+            <label class="layui-form-label">包名</label>
+            <div class="layui-input-block">
+                <input type="text" id="productPackge" lay-verify="required" lay-reqtext="包名是必填项" placeholder="请输入包名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">版本名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="versionName" lay-verify="required" lay-reqtext="版本名称是必填项" placeholder="请输入版本名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">版本号</label>
+            <div class="layui-input-block">
+                <input type="text" id="versionCode" lay-verify="required|number" lay-reqtext="版本编号是必填项且只能为数字" placeholder="请输入版本编号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">更新方式</label>
+            <div class="layui-input-block">
+                <input type="radio" name="updateMethod" value="1" title="推荐更新" checked="">
+                <input type="radio" name="updateMethod" value="2" title="强制更新">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">更新说明</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入更新说明" id="updateDirections" lay-verify="required" lay-reqtext="更新说明是必填项" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上传APK文件</label>
+            <input type="file" id="fileid" name="file"/></p>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" lay-submit=""  id="submit" lay-filter="demo1">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script>
+    layui.use(['form', 'upload',"layer"], function(){
+        var form = layui.form,
+            layer = layui.layer
+            ,upload = layui.upload;
+
+        upload.render({
+            elem: '#test10'
+            ,auto: false
+            ,accept:'file'
+            ,drag :true
+            ,exts: 'apk|dll|exe'
+        });
+        $('#submit').click(function (){
+            var productPackge = $.trim($('#productPackge').val());
+            var versionCode = $.trim($('#versionCode').val());
+            var versionName = $.trim($('#versionName').val());
+            var updateDirections = $.trim($('#updateDirections').val());
+            var updateMethod = $.trim($('input[name="updateMethod"]:checked').val());
+            var files = $('#fileid').prop('files')[0];
+            var formData = new FormData();
+            formData.append("file",files);
+            formData.append("productPackge", productPackge);
+            formData.append("versionCode", versionCode);
+            formData.append("versionName", versionName);
+            formData.append("updateDirections", updateDirections);
+            formData.append("updateMethod", updateMethod);
+            formData.append("runmethod", 1);
+            layer.msg('上传中', {
+                icon: 16
+                ,shade: 0.01
+            });
+            $.ajax({
+                url:'server/upload',
+                type : "post",
+                dataType:'json',
+                data: formData,
+                processData : false,
+                contentType : false,
+                enctype:"multipart/form-data",
+                success: function(data){
+                    layer.closeAll('loading');
+                    if (data.code == '200') {
+                        layer.alert(data.message);
+                    }
+                    if (data.code == '401') {
+                        layer.alert(data.message);
+                    }
+                    if (data.code == '402') {
+                        layer.alert(data.message);
+                    }
+                    if (data.code == '403') {
+                        layer.alert(data.message);
+                    }
+                    if (data.code == '405') {
+                        layer.alert(data.message);
+                    }
+                },
+                error:function(response){
+                    layer.alert("服务器异常");
+                }
+            });
+        });
+    });
+</script>
+</html>
