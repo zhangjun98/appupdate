@@ -1,10 +1,5 @@
 package com.ztkj.platform.update.Utils;
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static sun.misc.MessageUtils.where;
 
 /**
  * @Author: zhang-jun
@@ -13,7 +8,7 @@ import static sun.misc.MessageUtils.where;
  */
 public class FileUtils {
 
-    private static String BashLocal=PathUtils.getBaseLocal();
+    private static String BashLocal=new PathUtils().getBaseLocal();
 
     private static boolean initBashLocal(){
         File file = new File(BashLocal);
@@ -100,4 +95,7 @@ public class FileUtils {
        return file;
     }
 
+  /*  public static void main(String[] args) {
+        System.out.println(PathUtils.getBaseLocal());
+    }*/
 }

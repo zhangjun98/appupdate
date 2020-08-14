@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 public class ServerService {
     @Autowired
     CatchUtils catchUtils;
+    /*@Autowired
+    FileProp fileProp;*/
+
+
 
     public boolean addNewProductInfo(ProductEntity productEntity){
         return  catchUtils.addNewProduct(productEntity);

@@ -1,8 +1,7 @@
 package com.ztkj.platform.update.Utils;
 
-import org.springframework.util.unit.DataSize;
-
 import java.io.File;
+import java.util.Properties;
 
 /**
  * @Author: zhang-jun
@@ -11,24 +10,36 @@ import java.io.File;
  */
 public class PathUtils {
     public static String parator=File.separator;
-    private static String WinBashLocal="D:"+ parator +"基础文件上传下载";
-    private static String LinBashLocal="/home"+ parator+"baseFile";
+
+   static String win = null;
+    static String lin = null;
+    public static void init (String win,String lin){
+        PathUtils.win=win;
+        PathUtils.lin=lin;
+    }
 
 
     public static boolean isWindows() {
         return System.getProperty("os.name").toUpperCase().indexOf("WINDOWS")>=0?true:false;
     }
 
-    public static String getBaseLocal(){
+    public   String getBaseLocal(){
+       Properties properties = new Properties();
+       String WinBashLocal="F:"+ parator +"基础文件上传下载";
+        String LinBashLocal="/home"+ parator+"baseFile";
         if(isWindows()){
+            if(win!=null){
+                WinBashLocal=win;
+                System.out.println("来自文件=== "+WinBashLocal);
+            }
             return WinBashLocal;
         }else{
+            if(lin!=null){
+                LinBashLocal=lin;
+            }
             return LinBashLocal;
         }
     }
 
-  /*  public static void main(String[] args) {
-        System.out.println(DataSize.parse("120MB"));
-        ;
-    }*/
+
 }
