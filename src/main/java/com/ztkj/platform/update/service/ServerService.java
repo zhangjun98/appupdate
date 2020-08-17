@@ -3,6 +3,7 @@ package com.ztkj.platform.update.service;
 
 import com.ztkj.platform.update.Utils.CatchUtils;
 import com.ztkj.platform.update.beans.ProductEntity;
+import com.ztkj.platform.update.config.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Service;
 public class ServerService {
     @Autowired
     CatchUtils catchUtils;
-    /*@Autowired
-    FileProp fileProp;*/
+    @Autowired
+    Properties fileProp;
 
 
 
@@ -27,6 +28,12 @@ public class ServerService {
         return  catchUtils.updateNewproduct(productEntity);
     }
     public ProductEntity getProduct(String productid){
-        return catchUtils.getEntity(productid);
+        if(fileProp.getCache()!=null&&!fileProp.getCache()){
+            return catchUtils.getEntityFormDataBase(productid.trim());
+        }
+        else{
+            return catchUtils.getEntity(productid);
+        }
+
     }
 }

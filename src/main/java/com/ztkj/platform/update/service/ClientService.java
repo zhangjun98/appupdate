@@ -1,17 +1,13 @@
 package com.ztkj.platform.update.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ztkj.platform.update.Utils.CatchUtils;
 import com.ztkj.platform.update.beans.ProductEntity;
+import com.ztkj.platform.update.config.Properties;
 import com.ztkj.platform.update.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: zhang-jun
@@ -20,16 +16,27 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class ClientService {
-
+    @Autowired
+    ProductMapper productMapper;
     @Autowired
     CatchUtils catchUtils;
-
+    @Autowired
+    Properties fileProp;
     public Integer getNewVersion( String productid){
-       return catchUtils.getNewVersion(productid.trim());
+        if(fileProp.getCache()!=null&&!fileProp.getCache()){
+            return catchUtils.getNewVersionFormDatabase(productid.trim());
+        }
+       else{
+            return catchUtils.getNewVersion(productid.trim());
+        }
     }
 
     public ProductEntity getProduct(String productid){
-        return catchUtils.getEntity(productid);
+        if(fileProp.getCache()!=null&&!fileProp.getCache()){
+            return catchUtils.getEntityFormDataBase(productid.trim());
+        }else{
+            return catchUtils.getEntity(productid);
+        }
     }
 
     /**

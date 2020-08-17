@@ -1,6 +1,8 @@
 package com.ztkj.platform.update.controller;
 
 
+import com.ztkj.platform.update.config.Properties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
@@ -8,11 +10,20 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginResgisterController {
-
+	@Autowired
+	Properties fileProp;
     @ResponseBody
 	@RequestMapping(value = "/dealLogin",method = RequestMethod.POST)
 	public String getInfo(@RequestParam(value = "num") String num, @RequestParam(value = "psw") String psw, HttpSession httpSession) {
-				if(num.equals("admin")&&psw.equals("admin")){
+    			String username="admin";
+    			String password="admin";
+    			if(fileProp.getUsername()!=null){
+					username=fileProp.getUsername();
+				}
+				if(fileProp.getPassword()!=null){
+					password=fileProp.getPassword();
+				}
+				if(num.equals(username)&&psw.equals(password)){
 				httpSession.setAttribute("account", num);
 				httpSession.setAttribute("name", num);
 				httpSession.setAttribute("photo", "admin.png");

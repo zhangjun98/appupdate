@@ -1,14 +1,14 @@
 package com.ztkj.platform.update.Utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.ztkj.platform.update.beans.ProductEntity;
+import com.ztkj.platform.update.config.Properties;
 import com.ztkj.platform.update.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,8 +19,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class CatchUtils {
+    @Autowired
+    Properties fileProp;
 
     private static Long beginTime =System.currentTimeMillis();
+
+    private static Long refreshtime=1000*60*60L;
+
+    @PostConstruct
+    public void init(){
+        refreshtime=fileProp.getRefreshtime();
+    }
     /**
      * 设置缓存失效时间
      */
@@ -30,7 +39,7 @@ public class CatchUtils {
             //求得是毫秒时间差
             long startTime = System.currentTimeMillis() - beginTime;
             //一小时清空一次缓存
-            if(startTime>(1000*60*60)){
+            if(startTime>refreshtime){
                 isInit=false;
                 beginTime =System.currentTimeMillis();
                 if(fileVersionMap!=null){
@@ -161,7 +170,7 @@ public class CatchUtils {
         }
         return isadd;
     }
-    private synchronized ProductEntity getEntityFormDataBase(String id){
+    public synchronized ProductEntity getEntityFormDataBase(String id){
         QueryWrapper<ProductEntity> wrapper = new QueryWrapper<>();
         wrapper.eq("isNew",1);
         wrapper.eq("productID",id);
@@ -173,7 +182,7 @@ public class CatchUtils {
      * @param id
      * @return
      */
-    private synchronized Integer getNewVersionFormDatabase(String id){
+    public synchronized Integer getNewVersionFormDatabase(String id){
         Integer version=null;
         ProductEntity productEntity = getEntityFormDataBase(id);
         if(productEntity!=null&&productEntity.getProductVersionID()!=null&&productEntity.getProductID()!=null){

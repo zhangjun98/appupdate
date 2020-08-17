@@ -8,12 +8,13 @@ import com.ztkj.platform.update.common.CommonResponse;
 import com.ztkj.platform.update.common.ResponseCode;
 import com.ztkj.platform.update.service.ServerService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -72,11 +73,14 @@ public class ProductUpdateController {
         if(fileName.indexOf("apk")==-1){
             return new CommonResponse(ResponseCode.Wrong_File_Name,"文件类型只能为apk类型") ;
         }
-        FileUtils.makeDir(productPackge, String.valueOf(versionCode));
+        try{
+            FileUtils.makeDir(productPackge, String.valueOf(versionCode));
+        }catch (Exception e){
+            return new CommonResponse(ResponseCode.File_Failed_To_Upload,"文件服务器加载异常");
+        }
         File pathFile= FileUtils.getFilePath(productPackge, String.valueOf(versionCode));
         if(pathFile==null){
             return new CommonResponse(ResponseCode.File_Failed_To_Upload,"上传失败");
-
         }
         String filePath =pathFile.getAbsolutePath();
         File dest = new File(filePath + PathUtils.parator +fileName);

@@ -8,7 +8,7 @@ import java.io.File;
  */
 public class FileUtils {
 
-    private static String BashLocal=new PathUtils().getBaseLocal();
+    private static String BashLocal=PathUtils.getBaseLocal();
 
     private static boolean initBashLocal(){
         File file = new File(BashLocal);

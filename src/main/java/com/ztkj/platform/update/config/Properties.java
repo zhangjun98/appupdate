@@ -9,10 +9,14 @@ import org.springframework.stereotype.Component;
  * @Description:
  */
 @Component
-@ConfigurationProperties(prefix = "file")
-@PropertySource(value = "classpath:FilePath.properties")
+@ConfigurationProperties(prefix = "config")
+@PropertySource(value = "classpath:config.properties")
 @Data
-public class FileProp {
+public class Properties {
     String linuxbasepath;
     String winbasepath;
+    String username;
+    String password;
+    Long refreshtime;
+    Boolean cache;
 }
