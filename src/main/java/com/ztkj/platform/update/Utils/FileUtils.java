@@ -95,7 +95,5 @@ public class FileUtils {
        return file;
     }
 
-  /*  public static void main(String[] args) {
-        System.out.println(PathUtils.getBaseLocal());
-    }*/
+
 }

@@ -3,6 +3,7 @@ package com.ztkj.platform.update.Utils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ztkj.platform.update.beans.ProductEntity;
 import com.ztkj.platform.update.config.Properties;
+import com.ztkj.platform.update.loggmanger.LoggManger;
 import com.ztkj.platform.update.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,7 @@ public class CatchUtils {
     /**
      * 设置缓存失效时间
      */
+    @PostConstruct
     public static void register(){
         //设置缓存失效
         while (true){
@@ -44,6 +46,7 @@ public class CatchUtils {
                 beginTime =System.currentTimeMillis();
                 if(fileVersionMap!=null){
                     fileVersionMap.clear();
+                    LoggManger.info("缓存清空");
                 }
             }
         }

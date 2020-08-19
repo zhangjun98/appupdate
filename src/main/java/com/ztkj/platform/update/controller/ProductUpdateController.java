@@ -6,6 +6,7 @@ import com.ztkj.platform.update.Utils.PathUtils;
 import com.ztkj.platform.update.beans.ProductEntity;
 import com.ztkj.platform.update.common.CommonResponse;
 import com.ztkj.platform.update.common.ResponseCode;
+import com.ztkj.platform.update.loggmanger.LoggManger;
 import com.ztkj.platform.update.service.ServerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -107,6 +108,7 @@ public class ProductUpdateController {
             }
 
         } catch (IOException e) {
+            LoggManger.info("用户上传异常",e);
         }
         }
         return new CommonResponse(ResponseCode.File_Failed_To_Upload,"上传失败") ;

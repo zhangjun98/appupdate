@@ -6,6 +6,7 @@ import com.ztkj.platform.update.beans.ResponseData;
 import com.ztkj.platform.update.common.CommonResponse;
 import com.ztkj.platform.update.common.ResponseCode;
 import com.ztkj.platform.update.common.haveNewVersionResponse;
+import com.ztkj.platform.update.loggmanger.LoggManger;
 import com.ztkj.platform.update.service.ClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -184,20 +185,18 @@ public class    ClientUpdateController {
         } catch (ClientAbortException e) {
            // System.out.println("用户停止下载：" + startByte + "-" + endByte + "：" + transmitted);
         } catch (IOException e) {
-            e.printStackTrace();
+            LoggManger.info("用户下载异常"+"下载文件为:"+fileName,e);
         } finally {
             try {
                 if (randomAccessFile != null) {
                     randomAccessFile.close();
                 }
             } catch (IOException e) {
+                LoggManger.info("用户下载关闭流异常"+"下载文件为:"+fileName,e);
                 e.printStackTrace();
             }
         }
         return new CommonResponse(ResponseCode.Download_Scuess,"下载成功");
     }
-        @GetMapping("/123")
-        private void test(){
-    System.out.println("流利");
-}
+
 }
