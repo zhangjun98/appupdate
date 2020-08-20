@@ -193,7 +193,7 @@ public class    ClientUpdateController {
                 }
             } catch (IOException e) {
                 LoggManger.info("用户下载关闭流异常"+"下载文件为:"+fileName,e);
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         return new CommonResponse(ResponseCode.Download_Scuess,"下载成功");
