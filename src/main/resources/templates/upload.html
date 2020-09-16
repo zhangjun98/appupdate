@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="Sys/css/xadmin.css">
     <link rel="stylesheet" href="Sys/css/formSelects-v4.css" />
     <script type="text/javascript" src="Sys/js/jquery-3.3.1.min.js"></script>
+    <script src="Sys/js/appinfoparser.min.js"  charset="utf-8"></script>
     <script src="Sys/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="Sys/js/xadmin.js"></script>
     <script src="Sys/js/formSelects-v4.js" type="text/javascript" charset="utf-8"></script>
@@ -58,18 +59,24 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">上传APK文件</label>
-            <input type="file" id="fileid" name="file"/></p>
+            <input type="file" id="fileid" name="file" onchange="fileSelect()" ></p>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button type="button" class="layui-btn" lay-submit=""  id="submit" lay-filter="demo1">立即提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <button type="button" class="layui-btn" lay-submit=""  id="" lay-filter="demo1" onclick="reset()">重置信息</button>
             </div>
         </div>
     </form>
 </div>
 </body>
 <script>
+    function  reset(){
+        $('#productPackge').val("");
+        $('#versionCode').val("");
+        $('#versionName').val("")
+        $('#updateDirections').val("")
+    }
     layui.use(['form', 'upload',"layer"], function(){
         var form = layui.form,
             layer = layui.layer
@@ -80,7 +87,7 @@
             ,auto: false
             ,accept:'file'
             ,drag :true
-            ,exts: 'apk|dll|exe'
+            ,exts: 'apk'
         });
         $('#submit').click(function (){
             var productPackge = $.trim($('#productPackge').val());
@@ -88,7 +95,7 @@
             var versionName = $.trim($('#versionName').val());
             var updateDirections = $.trim($('#updateDirections').val());
             var updateMethod = $.trim($('input[name="updateMethod"]:checked').val());
-            var files = $('#fileid').prop('files')[0];
+            var files =$('#fileid').prop('files')[0];
             var formData = new FormData();
             formData.append("file",files);
             formData.append("productPackge", productPackge);

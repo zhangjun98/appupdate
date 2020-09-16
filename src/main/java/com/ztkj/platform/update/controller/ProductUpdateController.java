@@ -32,8 +32,6 @@ import java.io.IOException;
 public class ProductUpdateController {
     @Autowired
     ServerService serverService;
-
-
     @PostMapping("/upload")
     @ResponseBody
     @ApiOperation("上传接口")

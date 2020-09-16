@@ -34,23 +34,33 @@ public class CatchUtils {
     /**
      * 设置缓存失效时间
      */
-    @PostConstruct
-    public static void register(){
-        //设置缓存失效
-        while (true){
-            //求得是毫秒时间差
-            long startTime = System.currentTimeMillis() - beginTime;
-            //一小时清空一次缓存
-            if(startTime>refreshtime){
-                isInit=false;
-                beginTime =System.currentTimeMillis();
-                if(fileVersionMap!=null){
-                    fileVersionMap.clear();
-                    LoggManger.info("缓存清空");
-                }
+    public static boolean install(){
+        Thread    thread = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    while (true){
+                        //求得是毫秒时间差
+                        long startTime = System.currentTimeMillis() - beginTime;
+                        //一小时清空一次缓存
+                        if(startTime>refreshtime){
+                            isInit=false;
+                            beginTime =System.currentTimeMillis();
+                            if(fileVersionMap!=null){
+                                fileVersionMap.clear();
+                                LoggManger.info("缓存清空");
+                            }
+                        }
+                    }
+            }catch (Exception ex){
+                    LoggManger.error("日志管理器运行出错," + ex.getMessage(),ex);
             }
         }
-    }
+    });
+        thread.setDaemon(true);
+        thread.start();
+        return true;
+}
     @Autowired
     ProductMapper productmapper;
 

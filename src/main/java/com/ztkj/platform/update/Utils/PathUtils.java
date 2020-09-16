@@ -38,13 +38,13 @@ public class PathUtils {
             if (win != null) {
                 WinBashLocal = win;
             }
-            LoggManger.info("基本路径为"+WinBashLocal);
+            LoggManger.info("Win-基本路径为"+WinBashLocal);
             return WinBashLocal;
         } else {
             if (lin != null) {
                 LinBashLocal = lin;
             }
-            LoggManger.info("基本路径为"+LinBashLocal);
+            LoggManger.info("Lin -基本路径为"+LinBashLocal);
             return LinBashLocal;
         }
     }

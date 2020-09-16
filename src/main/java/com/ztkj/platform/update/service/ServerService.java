@@ -19,9 +19,7 @@ public class ServerService {
     @Autowired
     Properties fileProp;
 
-
-
-    public boolean addNewProductInfo(ProductEntity productEntity){
+  public boolean addNewProductInfo(ProductEntity productEntity){
         return  catchUtils.addNewProduct(productEntity);
     }
     public boolean updateProductInfo(ProductEntity productEntity){

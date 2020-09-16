@@ -197,4 +197,20 @@ function x_admin_close(){
     parent.layer.close(index);
 }
 
+function  fileSelect() {
+    const elemi  = $('#fileid').prop('files')[0];
+    try {
+        const parser = new AppInfoParser(elemi)
+        parser.parse().then(result => {
+            //包名
+            $("#productPackge").val(result['package'] || result['CFBundleName']);
+            // 版本名称
+            $("#versionName").val(result['versionName'] || result['CFBundleShortVersionString'] );
+        }).catch(e => {
+            window.alert('Parse Error: ' + e)
+        })
+    } catch (e) {
+        window.alert('Parse Error: ' + e)
+    }
+}
 

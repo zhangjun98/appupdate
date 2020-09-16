@@ -69,7 +69,7 @@ public class    ClientUpdateController {
     @GetMapping("/download/{productpackge}/{version}/{filename}")
     @ResponseBody
     @ApiOperation("文件下载的接口")
-    private CommonResponse DownLoadFile(        @PathVariable("productpackge") String productid,
+    private CommonResponse DownLoadFile(@PathVariable("productpackge") String productid,
                                                 @PathVariable(required = false) Integer version,
                                                 @PathVariable(value = "filename",required = false) String filename,
                                                 HttpServletResponse response,HttpServletRequest request,

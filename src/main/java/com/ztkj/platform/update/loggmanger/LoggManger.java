@@ -15,21 +15,15 @@ public class LoggManger  {
     public  static void warn(Object message, Throwable t) {
         log.warn(message.toString(),t);
     }
-
-
     public static void error(Object message, Throwable t) {
         log.error(message.toString(),t);
     }
-
-
     public static void info(Object message, Throwable t) {
         log.info(message.toString(),t);
     }
-
     public static void info(Object message) {
         log.info(message.toString());
     }
-
     public static void debug(Object message, Throwable t) {
         log.debug(message.toString(),t);
     }
